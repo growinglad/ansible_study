@@ -1,7 +1,7 @@
 ---
 
 - name: Area 0
-  hosts: GNS3-AREA0
+  hosts: GNS3-ALL
   gather_facts: false
   connection: local
 
