@@ -1,0 +1,25 @@
+---
+- name: show interface and vlan
+  hosts: VK05102-2960X-01,VK05102-3560G-01
+  gather_facts: false
+  connection: local
+
+
+  vars:
+    cli:
+      username: sgra
+      password: "!!Bik3Rid3!!qwert"
+
+
+  tasks:
+    - name: run multiple commands on remote nodes
+      ios_command:
+        provider: "{{ cli }}"
+        authorize: yes        
+        commands:
+          - show ip int brief | in Vlan666
+          - show vlan brief | in 666
+
+      register: print_output
+
+    -  debug: var=print_output.stdout_lines
