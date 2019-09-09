@@ -16,7 +16,7 @@
       ios_command:
         provider: "{{ cli }}"
         commands:
-          - clock set 13:20:00 9 sep 2019
+          - clock set 13:31:00 9 sep 2019
 
     - name: Global config settings
       ios_config:
@@ -58,7 +58,7 @@
         provider: "{{ cli }}"
         commands:
         - command: 'copy running start'
-          prompt: 'Destination filename [startup-config]? \[confirm\]'
+          prompt: '[confirm]'
           answer: "\r"
 
       register: print_output
