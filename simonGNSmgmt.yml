@@ -1,0 +1,53 @@
+---
+
+- name: Area 0
+  hosts: GNS3-AREA0
+  gather_facts: false
+  connection: local
+
+  vars:
+    cli:
+      username: simon
+      password: simon
+
+  tasks:
+    - name: Global config settings
+      ios_config:
+        provider: "{{ cli }}"
+        lines:
+          - no ip name-server
+          - no ip http server
+          - ip http secure-server
+          - ntp_destination
+
+          - snmp-server community python1 RO
+          - snmp-server community python2 RW
+
+          - clock timezone CET +1
+          - clock summer-time CET recurring
+          - service timestamps debug datetime msec localtime
+          - service timestamps log datetime msec localtime
+
+      register: print_output
+
+    - debug: var=print_output
+
+    - name: Interface settings
+      ios_config:
+        provider: "{{ cli }}"
+        parents: "interface {{ item.interface }}"
+        lines:
+          - "description {{ item.description }}"
+          - "ip address {{ item.ip_address }}"
+          - delay 10
+          - ntp broadcast key 1 destination {{ item.ntp_destination }}
+
+        after:
+          - no shutdown
+      with_items:
+        - { interface : loopback 5, description : Ansible_one, ip_address : '69.69.69.1 255.255.255.255', ntp_destination : '8.8.8.8' }
+        - { interface : loopback 55, description : Ansible_two, ip_address : '69.69.69.2 255.255.255.255', ntp_destination : '8.8.8.8' }
+
+      register: print_output
+
+    - debug: var=print_output

@@ -1,0 +1,22 @@
+---
+- name: Config Multi Devices
+  hosts: VK05102-2960X-01,VK05102-3560G-01
+  gather_facts: false
+  connection: local
+
+  vars:
+    cli:
+      username: sgra
+      password: "!!Bik3Rid3!!qwert"
+
+  tasks:
+    - name: Config Vlan
+      ios_config:
+        provider: "{{ cli }}"
+        authorize: yes
+        parents: no vlan 666
+
+
+      register: print_output
+
+    -  debug: var=print_output

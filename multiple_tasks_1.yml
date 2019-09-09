@@ -1,0 +1,45 @@
+---
+- name: Multiple device changes
+  hosts: VK05102-3560G-01,VK05102-2960X-01
+  gather_facts: false
+  connection: local
+
+  vars:
+    cli:
+      username: sgra
+      password: "!!Bik3Rid3!!qwert"
+
+  tasks:
+    - name: Create SVI
+      ios_config:
+        provider: "{{ cli }}"
+        authorize: yes
+        parents: int vlan 666
+        lines:
+          - description Ansible_test
+
+      register: print_output
+
+    -  debug: var=print_output
+
+- name: Switch specific config
+  hosts: VK05102-3560G-01
+  gather_facts: false
+  connection: local
+  vars:
+    cli:
+      username: sgra
+      password: "!!Bik3Rid3!!qwert"
+
+  tasks:
+    - name: Config Vlan
+      ios_vlan:
+        provider: "{{ cli }}"
+        authorize: yes
+        vlan_id: 666
+        name: Ansible_test
+        state: present
+
+      register: print_output
+
+    -  debug: var=print_output

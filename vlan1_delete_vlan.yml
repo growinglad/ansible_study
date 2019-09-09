@@ -1,0 +1,23 @@
+---
+- name: Config Multi Devices
+  hosts: VK05102-2960X-01,VK05102-3560G-01
+  gather_facts: false
+  connection: local
+
+  vars:
+    cli:
+      username: sgra
+      password: "!!Bik3Rid3!!qwert"
+
+  tasks:
+    - name: Delete Vlan
+      ios_vlan:
+        provider: "{{ cli }}"
+        authorize: yes
+        vlan_id: 666
+        state: absent
+
+
+      register: print_output
+
+    -  debug: var=print_output
